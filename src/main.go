@@ -14,7 +14,8 @@ import (
 func main() {
 	ctx := context.Background()
 
-	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
+	projectID := "mgcp-ops-sandbox"
+	fmt.Printf(projectID)
 	if projectID == "" {
 		fmt.Fprintf(os.Stderr, "GOOGLE_CLOUD_PROJECT environment variable must be set.\n")
 		os.Exit(1)
