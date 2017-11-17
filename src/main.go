@@ -8,6 +8,7 @@ import (
 
 	"cloud.google.com/go/storage"
 	"golang.org/x/net/context"
+	"google.golang.org/api/iterator"
 )
 
 func main() {
@@ -40,4 +41,32 @@ func main() {
 	}
 	fmt.Printf("buckets: %+v\n", buckets)
 
+}
+
+func create(client *storage.Client, projectID, bucketName string) error {
+	ctx := context.Background()
+	// [START create_bucket]
+	if err := client.Bucket(bucketName).Create(ctx, projectID, nil); err != nil {
+		return err
+	}
+	// [END create_bucket]
+	return nil
+}
+func list(client *storage.Client, projectID string) ([]string, error) {
+	ctx := context.Background()
+	// [START list_buckets]
+	var buckets []string
+	it := client.Buckets(ctx, projectID)
+	for {
+		battrs, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		buckets = append(buckets, battrs.Name)
+	}
+	// [END list_buckets]
+	return buckets, nil
 }
